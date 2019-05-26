@@ -5,18 +5,15 @@ import random
 #would be cool to do based on age -> method that increments age
 
 
-def main():
-    #book keeping for the random numbers
-    #seed = 100
-    #random.seed(seed)
+def main(n):
+    #book keeping for the random number    
     
     #specifying some parameters
-    n = 6
-    populationTotal = 1000
-    probMutate = 0.05
-    generations = 100
-    tournamentAmount = 20
-    offspringCount = 100
+    populationTotal = 2000
+    probMutate = 0.1
+    generations = 50
+    tournamentAmount = 500
+    offspringCount = 300
     
     
     #constructing the population
@@ -35,7 +32,8 @@ def main():
     for i in range(populationTotal):
         fitness.append(individuals[i].fitness)
     idx = fitness.index(min(fitness))
-    print('Genetic Algorithm Solution: ',individuals[idx].chromosome)
+    return individuals[idx].chromosome
+
     
 class Individual:
     
@@ -119,12 +117,26 @@ class Population():
             self.individuals.append(newChild)
         
 def fitnessFunction(chromosome):
-    weights = [1,-1,1,1,-1,1]
     sum=0
     for i in range(len(chromosome)):
         sum += weights[i]*chromosome[i]
     return sum
 
 if __name__ == '__main__':
-    main()
-    print('Correct Solution:           ', [0,1,0,0,1,0])
+    n = 100
+    #seed = 100
+    #random.seed(seed)
+    trials = 100
+    stats = 0
+    for trial in range(trials):
+        weights = [random.choice([-1,1]) for _ in range(n)]
+        correctSolution = [int((weights[i]-1)/(-2)) for i in range(len(weights))]
+        solution = main(n)
+        if correctSolution==solution:
+            stats+=1
+    if trials ==1:
+        print('The weights are:           ', weights)
+        print('The correct solution is:    ',  correctSolution )
+        print('Genetic Algorithm Solution: ',solution)
+    print('Percent correct solutions:',stats/trials*100)
+    
